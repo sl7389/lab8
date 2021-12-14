@@ -23,7 +23,7 @@ void setup() {
     pinMode(buttonPins[i], INPUT);
     pinMode(ledPins[i], OUTPUT);
   }
-//  pinMode(directionPin, INPUT);
+  //  pinMode(directionPin, INPUT);
   pinMode(prevChannelButtonPin, INPUT);
   pinMode(nextChannelButtonPin, INPUT);
 }
@@ -38,13 +38,23 @@ void loop() {
 void checkChannelButton() {
   lastButtonStatePrev = buttonStatePrev;
   buttonStatePrev = digitalRead(32);
+  lastButtonStateNext = buttonStateNext;
+  buttonStateNext = digitalRead(14);
   if (lastButtonStatePrev == LOW and buttonStatePrev == HIGH) {
-    channelDisplayed=
-  } else if (lastButtonStatePrev == HIGH and buttonStatePrev == LOW) {
-    delay(5);
+    channelDisplayed--;
+    if (channelDisplayed < 0) {
+      channelDisplayed = 2;
+    }
+
+  }
+  if (lastButtonStateNext == HIGH and buttonStateNext == LOW) {
+    channelDisplayed++;
+    if (channelDisplayed > 2) {
+      channelDisplayed = 0;
+    }
   }
 }
-}
+
 
 void checkButton() {
   for (int i = 0; i < 4; i++) {
