@@ -35,8 +35,10 @@ void setup() {
 void loop() {
 
   checkButton();
+  checkChannelButton();
   sequencing();
   checkLed();
+  Serial.println(digitalRead(32));
 
 }
 void checkChannelButton() {
@@ -48,10 +50,12 @@ void checkChannelButton() {
     channelDisplayed--;
     if (channelDisplayed < 0) {
       channelDisplayed = 2;
-    }
+    }else{
+      channelDisplayed = channelDisplayed;
+      }
 
   }
-  if (lastButtonStateNext == HIGH and buttonStateNext == LOW) {
+  if (lastButtonStateNext == LOW and buttonStateNext == HIGH) {
     channelDisplayed++;
     if (channelDisplayed > 2) {
       channelDisplayed = 0;
@@ -66,7 +70,7 @@ void checkButton() {
     buttonState[i] = digitalRead(buttonPins[i]);
 
     if (lastButtonState[i] == LOW and buttonState[i] == HIGH) {
-      buttonOn[0][i] = !buttonOn[0][i];
+      buttonOn[channelDisplayed][i] = !buttonOn[channelDisplayed][i];
       delay(5);
     } else if (lastButtonState[i] == HIGH and buttonState[i] == LOW) {
       delay(5);
@@ -110,11 +114,11 @@ void sequencing() {
 
 void checkLed() {
   for (int i = 0; i < 4; i++) {
-    if (buttonOn[0][i] == true) {
-      analogWrite(ledPins[i], 100);
+    if (buttonOn[channelDisplayed][i] == true) {
+      analogWrite(ledPins[i], 60);
     } if (i == currentStep) {
       //      Serial.println(currentStep);
-      analogWrite(ledPins[i], 200);
+      analogWrite(ledPins[i], 100);
     } else {
       analogWrite(ledPins[i], 0);
     }
