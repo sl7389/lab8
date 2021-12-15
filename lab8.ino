@@ -1,8 +1,8 @@
 bool buttonState[4] = {LOW, LOW, LOW, LOW};
 bool lastButtonState[4] = {LOW, LOW, LOW, LOW};
 boolean buttonOn[3][4] = {
-  { LOW, HIGH, LOW, HIGH },
-  { LOW, HIGH, HIGH, HIGH },
+  { LOW, HIGH, LOW, LOW },
+  { LOW, LOW, HIGH, LOW },
   { LOW, LOW, LOW, HIGH }
 };
 int buttonPins[4] = {35, 37, 39, 33};
@@ -50,9 +50,9 @@ void checkChannelButton() {
     channelDisplayed--;
     if (channelDisplayed < 0) {
       channelDisplayed = 2;
-    }else{
+    } else {
       channelDisplayed = channelDisplayed;
-      }
+    }
 
   }
   if (lastButtonStateNext == LOW and buttonStateNext == HIGH) {
@@ -84,28 +84,29 @@ void sequencing() {
 
 
 
-//    if (digitalRead(directionPin) == LOW) {
-      currentStep++;
-      if (currentStep > 3) {
-        currentStep = 0;
-      }
-
-//    } else {
-//      currentStep--;
-//      if (currentStep < 0) {
-//        currentStep = 3;
-//      }
-//
-//    }
-//    Serial.println(buttonOn[currentStep]);
-    if (buttonOn[channelDisplayed][currentStep] == HIGH) {
-
-      usbMIDI.sendNoteOff(midiNotes[currentStep], 0, 1);
-      delay(5);
-      usbMIDI.sendNoteOn(midiNotes[currentStep], 90, 1);
-      delay(5);
+    //    if (digitalRead(directionPin) == LOW) {
+    currentStep++;
+    if (currentStep > 3) {
+      currentStep = 0;
     }
 
+    //    } else {
+    //      currentStep--;
+    //      if (currentStep < 0) {
+    //        currentStep = 3;
+    //      }
+    //
+    //    }
+    //    Serial.println(buttonOn[currentStep]);
+    for (int i = 0; i < 3; i++) {
+      if (buttonOn[i][currentStep] == HIGH) {
+
+        usbMIDI.sendNoteOn(midiNotes[currentStep], 90, 1);
+        delay(5);
+        usbMIDI.sendNoteOff(midiNotes[currentStep], 0, 1);
+        delay(5);
+      }
+    }
 
   }
 
