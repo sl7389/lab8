@@ -98,7 +98,7 @@ void sequencing() {
 //
 //    }
 //    Serial.println(buttonOn[currentStep]);
-    if (buttonOn[0][currentStep] == HIGH) {
+    if (buttonOn[channelDisplayed][currentStep] == HIGH) {
 
       usbMIDI.sendNoteOff(midiNotes[currentStep], 0, 1);
       delay(5);
